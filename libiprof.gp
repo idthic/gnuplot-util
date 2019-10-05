@@ -16,10 +16,10 @@ mulp_tm_(r,c,margin) = mulp_bmargin + (1.0 - mulp_tmargin - mulp_bmargin) * (1.0
 MulpInitialize(rows,cols,lm,rm,bm,tm) = \
   sprintf('mulp_rows = %d;', rows). \
   sprintf('mulp_cols = %d;', cols). \
-  sprintf('mulp_lmargin = %d;', lm). \
-  sprintf('mulp_rmargin = %d;', rm). \
-  sprintf('mulp_bmargin = %d;', bm). \
-  sprintf('mulp_tmargin = %d', tm)
+  sprintf('mulp_lmargin = %g;', lm). \
+  sprintf('mulp_rmargin = %g;', rm). \
+  sprintf('mulp_bmargin = %g;', bm). \
+  sprintf('mulp_tmargin = %g', tm)
 
 MulpSetMargins(r,c,lm,rm,bm,tm) = \
   sprintf('set lmargin at screen %g;',mulp_lm_(r,c,lm)). \
@@ -84,5 +84,6 @@ PlotInitialConditionProfiles(title,filename) = "\
   set ylabel '{/Times:Italic y} [fm]' offset character -4,0 rotate parallel; \
   set view 0,359.99; \
   unset ztics; \
-  splot [-2:2] [-2:2] xyprofile(a_filename,2.4) u 1:2:3 w pm3d t '' "
-
+  splot [-2:2] [-2:2] xyprofile(a_filename,2.4) u 1:2:3 w pm3d t ''; \
+ \
+  unset multiplot "
