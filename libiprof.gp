@@ -30,9 +30,13 @@ MulpSetMargins(r,c,lm,rm,bm,tm) = \
 xyprofile(file,h) = sprintf("< awk '$1==%g{if($2!=x){print \"\";x=$2}print $2,$3,$4}' %s",h,file)
 hxprofile(file) = sprintf("< awk '$3==0{if($1!=h){print \"\";h=$1}print $1,$2,$4}' %s",file)
 
+libiprof_transverse_extent = 2.0
+libiprof_longitudinal_extent = 6.0
 PlotInitialConditionProfiles(title,filename) = "\
   a_title='".title."'; \
   a_filename='".filename."'; \
+  a_trange=libiprof_transverse_extent; \
+  a_lrange=libiprof_longitudinal_extent; \
   print 'Plotting initial profile ('.a_title.')'; \
   reset; \
   set multiplot layout 2,3 title '{/=18 '.a_title.'}'; \
@@ -44,7 +48,7 @@ PlotInitialConditionProfiles(title,filename) = "\
   set ylabel '{/Times:Italic y} [fm]' offset character 0,-1; \
   set view 75,340; \
   set ticslevel 0; \
-  splot [-2:2] [-2:2] xyprofile(a_filename,0) u 1:2:3 w pm3d t ''; \
+  splot [-a_trange:a_trange] [-a_trange:a_trange] xyprofile(a_filename,0) u 1:2:3 w pm3d t ''; \
  \
   eval MulpSetMargins(0,1,0.25,0.25,0.3,0.2); \
   set title 'Longitudinal profile' offset character 0,1; \
@@ -52,7 +56,7 @@ PlotInitialConditionProfiles(title,filename) = "\
   set ylabel '{/Times:Italic x} [fm]' offset character 0,-1; \
   set view 75,340; \
   set ticslevel 0; \
-  splot [-6:6] [-2:2] hxprofile(a_filename) u 1:2:3 w pm3d t ''; \
+  splot [-a_lrange:a_lrange] [-a_trange:a_trange] hxprofile(a_filename) u 1:2:3 w pm3d t ''; \
  \
   eval MulpSetMargins(0,2,0.25,0.25,0.3,0.2); \
   set title 'Longitudinal profile' offset character 0,1; \
@@ -60,7 +64,7 @@ PlotInitialConditionProfiles(title,filename) = "\
   set ylabel '{/Times:Italic x} [fm]' offset character -4,0 rotate parallel; \
   set view 0,359.99; \
   unset ztics; \
-  splot [-6:6] [-2:2] hxprofile(a_filename) u 1:2:3 w pm3d t ''; \
+  splot [-a_lrange:a_lrange] [-a_trange:a_trange] hxprofile(a_filename) u 1:2:3 w pm3d t ''; \
  \
   eval MulpSetMargins(1,0,0.25,0.25,0.3,0.2); \
   set title 'Transverse profile ({/Times:Italic η} = -2.4)' offset character 0,1; \
@@ -68,7 +72,7 @@ PlotInitialConditionProfiles(title,filename) = "\
   set ylabel '{/Times:Italic y} [fm]' offset character -4,0 rotate parallel; \
   set view 0,359.99; \
   unset ztics; \
-  splot [-2:2] [-2:2] xyprofile(a_filename,-2.4) u 1:2:3 w pm3d t ''; \
+  splot [-a_trange:a_trange] [-a_trange:a_trange] xyprofile(a_filename,-2.4) u 1:2:3 w pm3d t ''; \
  \
   eval MulpSetMargins(1,1,0.25,0.25,0.3,0.2); \
   set title 'Transverse profile ({/Times:Italic η} = 0)' offset character 0,1; \
@@ -76,7 +80,7 @@ PlotInitialConditionProfiles(title,filename) = "\
   set ylabel '{/Times:Italic y} [fm]' offset character -4,0 rotate parallel; \
   set view 0,359.99; \
   unset ztics; \
-  splot [-2:2] [-2:2] xyprofile(a_filename,0) u 1:2:3 w pm3d t ''; \
+  splot [-a_trange:a_trange] [-a_trange:a_trange] xyprofile(a_filename,0) u 1:2:3 w pm3d t ''; \
  \
   eval MulpSetMargins(1,2,0.25,0.25,0.3,0.2); \
   set title 'Transverse profile ({/Times:Italic η} = 2.4)' offset character 0,1; \
@@ -84,6 +88,6 @@ PlotInitialConditionProfiles(title,filename) = "\
   set ylabel '{/Times:Italic y} [fm]' offset character -4,0 rotate parallel; \
   set view 0,359.99; \
   unset ztics; \
-  splot [-2:2] [-2:2] xyprofile(a_filename,2.4) u 1:2:3 w pm3d t ''; \
+  splot [-a_trange:a_trange] [-a_trange:a_trange] xyprofile(a_filename,2.4) u 1:2:3 w pm3d t ''; \
  \
   unset multiplot "
