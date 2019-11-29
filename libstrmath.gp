@@ -83,13 +83,14 @@ strmath_process_cmd1_1(cmdname, tail, tail_len, arg_len) = \
 strmath_process_cmd1_2(cmdname, arg, tail2, tail2_len) = ( \
   cmdname eq '\rm' ? arg : \
   cmdname eq '\tt' ? '{/monospace' . strmath_TTFONTSIZE . ' ' . arg . '}' : \
+  cmdname eq '\bm' ? '{/Times:Italic:Bold ' . arg . '}' : \
   strmath(arg)) . strmath_1(tail2, tail2_len);
 
 strmath_process_cmd(cmdname, tail, tail_len) = \
   cmdname eq '\\' ? "\n" . strmath_1(tail, tail_len) : \
   cmdname eq '\langle' ? strmath_symbol_langle . strmath_1(tail, tail_len) : \
   cmdname eq '\rangle' ? strmath_symbol_rangle . strmath_1(tail, tail_len) : \
-  cmdname eq '\rm' || cmdname eq '\tt' ? strmath_process_cmd1(cmdname, tail, tail_len) : \
+  cmdname eq '\rm' || cmdname eq '\tt' || cmdname eq '\bm' ? strmath_process_cmd1(cmdname, tail, tail_len) : \
   cmdname . strmath_1(tail, tail_len);
 
 strmath_process_italic(value, tail, tail_len) = '{/Times:Italic ' . value . '}' . strmath_1(tail, tail_len);
