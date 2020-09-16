@@ -1,5 +1,7 @@
 # gnuplot library -*- mode: sh -*-
 
+set encoding utf8
+
 mwg_min(x, y) = y < x ? y : x;
 mwg_max(x, y) = y > x ? y : x;
 mwg_strspn_generic(str, str_len, chars, yes) = \
