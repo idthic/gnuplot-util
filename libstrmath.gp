@@ -1,6 +1,14 @@
 # gnuplot library -*- mode: sh -*-
 
 set encoding utf8
+strmath_font_mathrm = 'Times'
+strmath_font_mathit = 'Times:Italic'
+strmath_font_mathbm = 'Times:Italic:Bold'
+
+# Note: gnuplot 5.2.4 では strstrt が文字数ではなくバイト数を返す為に '〉' が空
+#   文字列に置換されてしまう。5.4 のマニュアルには strstrt("αβ", "β") の例が
+#   載っているが 5.2 には載っていない。"gnuplot-5.(奇数)" は開発版の様で、5.3
+#   のマニュアルは見つけられなかった。
 
 mwg_min(x, y) = y < x ? y : x;
 mwg_max(x, y) = y > x ? y : x;
@@ -32,11 +40,13 @@ mwg_index_4(str, str_len, needle, needle_len, split, left, left_len) = \
 strmath_symbol_minus = '−'
 strmath_symbol_langle = '⟨'
 strmath_symbol_rangle = '⟩'
+strmath_symbol_quad = '   '
+strmath_symbol_qquad = '      '
 strmath_chars_blank = " \t\n"
 
 strmath_tok__LOWER = "abcdefghijklmnopqrstuvwxyz";
 strmath_tok__UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-strmath_tok__LOWERGREEK = "αβγδεζηθικλμνξοπρστυφχψω";
+strmath_tok__LOWERGREEK = "αβγδεζηθικλμνξοπρστυφχψωϕ";
 strmath_tok__ALPHA = strmath_tok__LOWER . strmath_tok__UPPER;
 strmath_tok__ITALIC = strmath_tok__ALPHA . strmath_tok__LOWERGREEK;
 strmath_tok__TEXTDELIM = '$';
@@ -85,24 +95,27 @@ strmath_process_cmd1_1(cmdname, tail, tail_len, arg_len) = \
 strmath_process_cmd1_2(cmdname, arg, tail2, tail2_len) = ( \
   cmdname eq '\rm' ? arg : \
   cmdname eq '\tt' ? '{/monospace' . strmath_TTFONTSIZE . ' ' . arg . '}' : \
-  cmdname eq '\bm' ? '{/Times:Italic:Bold ' . arg . '}' : \
+  cmdname eq '\bm' ? '{/'.strmath_font_mathbm.' ' . arg . '}' : \
   strmath(arg)) . strmath_1(tail2, tail2_len);
 
 strmath_process_cmd(cmdname, tail, tail_len) = \
   cmdname eq '\\' ? "\n" . strmath_1(tail, tail_len) : \
   cmdname eq '\langle' ? strmath_symbol_langle . strmath_1(tail, tail_len) : \
   cmdname eq '\rangle' ? strmath_symbol_rangle . strmath_1(tail, tail_len) : \
+  cmdname eq '\quad' ? strmath_symbol_quad . strmath_1(tail, tail_len) : \
+  cmdname eq '\qquad' ? strmath_symbol_qquad . strmath_1(tail, tail_len) : \
+  cmdname eq '\phi' ? '{/'.strmath_font_mathit.' ϕ}' . strmath_1(tail, tail_len) : \
   cmdname eq '\rm' || cmdname eq '\tt' || cmdname eq '\bm' ? strmath_process_cmd1(cmdname, tail, tail_len) : \
   cmdname . strmath_1(tail, tail_len);
 
-strmath_process_italic(value, tail, tail_len) = '{/Times:Italic ' . value . '}' . strmath_1(tail, tail_len);
+strmath_process_italic(value, tail, tail_len) = '{/'.strmath_font_mathit.' ' . value . '}' . strmath_1(tail, tail_len);
 
 strmath_process_del(delname, del_idx, tail, tail_len) = \
-  delname eq '$' ? strtext_1(tail, tail_len) : \
+  delname eq '$' ? '}'.strtext_1(tail, tail_len) : \
   strmath_tok_del2symbol(del_idx) . strmath_1(tail, tail_len);
 
-strmath(str) = strmath_1(str, strlen(str));
-strmath_1(str, str_len) = str_len <= 0 ? '' : \
+strmath(str) = '{/'.strmath_font_mathrm.' '.strmath_1(str, strlen(str));
+strmath_1(str, str_len) = str_len <= 0 ? '}' : \
   strmath_2(str, str_len, \
     strmath_tok_find_cmd(str, str_len), \
     strmath_tok_find_italic(str, str_len), \
@@ -130,7 +143,7 @@ strtext_process_cmd(cmdname, tail, tail_len) = \
   cmdname . strtext_1(tail, tail_len);
 
 strtext_process_del(delname, del_idx, tail, tail_len) = \
-  delname eq '$' ? strmath_1(tail, tail_len) : \
+  delname eq '$' ? '{/'.strmath_font_mathrm.' '.strmath_1(tail, tail_len) : \
   delname . strtext_1(tail, tail_len);
 
 strtext(str) = strtext_1(str, strlen(str));
