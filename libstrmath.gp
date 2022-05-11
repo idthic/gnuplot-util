@@ -93,9 +93,9 @@ strmath_process_cmd1(cmdname, tail, tail_len) = \
 strmath_process_cmd1_1(cmdname, tail, tail_len, arg_len) = \
   strmath_process_cmd1_2(cmdname, substr(tail, 1 + mwg_strspn_n(tail, tail_len, strmath_chars_blank), arg_len), substr(tail, arg_len + 1, tail_len), tail_len - arg_len);
 strmath_process_cmd1_2(cmdname, arg, tail2, tail2_len) = ( \
-  cmdname eq '\rm' ? arg : \
-  cmdname eq '\tt' ? '{/monospace' . strmath_TTFONTSIZE . ' ' . arg . '}' : \
-  cmdname eq '\bm' ? '{/'.strmath_font_mathbm.' ' . arg . '}' : \
+  cmdname eq '\rm' || cmdname eq '\mathrm' ? arg : \
+  cmdname eq '\tt' || cmdname eq '\mathtt' ? '{/monospace' . strmath_TTFONTSIZE . ' ' . arg . '}' : \
+  cmdname eq '\bm' || cmdname eq '\mathbm' ? '{/'.strmath_font_mathbm.' ' . arg . '}' : \
   strmath(arg)) . strmath_1(tail2, tail2_len);
 
 strmath_process_cmd(cmdname, tail, tail_len) = \
@@ -105,7 +105,7 @@ strmath_process_cmd(cmdname, tail, tail_len) = \
   cmdname eq '\quad' ? strmath_symbol_quad . strmath_1(tail, tail_len) : \
   cmdname eq '\qquad' ? strmath_symbol_qquad . strmath_1(tail, tail_len) : \
   cmdname eq '\phi' ? '{/'.strmath_font_mathit.' ϕ}' . strmath_1(tail, tail_len) : \
-  cmdname eq '\rm' || cmdname eq '\tt' || cmdname eq '\bm' ? strmath_process_cmd1(cmdname, tail, tail_len) : \
+  cmdname eq '\rm' || cmdname eq '\mathrm' || cmdname eq '\tt' || cmdname eq '\mathtt' || cmdname eq '\bm' || cmdname eq '\mathbm' ? strmath_process_cmd1(cmdname, tail, tail_len) : \
   cmdname . strmath_1(tail, tail_len);
 
 strmath_process_italic(value, tail, tail_len) = '{/'.strmath_font_mathit.' ' . value . '}' . strmath_1(tail, tail_len);
@@ -133,13 +133,13 @@ strtext_process_cmd1(cmdname, tail, tail_len) = \
 strtext_process_cmd1_1(cmdname, tail, tail_len, arg_len) = \
   strtext_process_cmd1_2(cmdname, substr(tail, 1 + mwg_strspn_n(tail, tail_len, strmath_chars_blank), arg_len), substr(tail, arg_len + 1, tail_len), tail_len - arg_len);
 strtext_process_cmd1_2(cmdname, arg, tail2, tail2_len) = ( \
-  cmdname eq '\rm' ? arg : \
-  cmdname eq '\tt' ? '{/monospace'.strmath_TTFONTSIZE.' ' . arg . '}' : \
+  cmdname eq '\rm' || cmdname eq '\textrm' ? arg : \
+  cmdname eq '\tt' || cmdname eq '\texttt' ? '{/monospace'.strmath_TTFONTSIZE.' ' . arg . '}' : \
   strtext(arg)) . strtext_1(tail2, tail2_len);
 
 strtext_process_cmd(cmdname, tail, tail_len) = \
   cmdname eq '\\' ? "\n" . strtext_1(tail, tail_len) : \
-  cmdname eq '\rm' || cmdname eq '\tt' ? strtext_process_cmd1(cmdname, tail, tail_len) : \
+  cmdname eq '\rm' || cmdname eq '\textrm' || cmdname eq '\tt' || cmdname eq '\texttt' ? strtext_process_cmd1(cmdname, tail, tail_len) : \
   cmdname . strtext_1(tail, tail_len);
 
 strtext_process_del(delname, del_idx, tail, tail_len) = \
