@@ -4,6 +4,7 @@ set encoding utf8
 strmath_font_mathrm = 'Times'
 strmath_font_mathit = 'Times:Italic'
 strmath_font_mathbm = 'Times:Italic:Bold'
+strmath_font_mathtt = 'monospace'
 
 # Note: gnuplot 5.2.4 では strstrt が文字数ではなくバイト数を返す為に '〉' が空
 #   文字列に置換されてしまう。5.4 のマニュアルには strstrt("αβ", "β") の例が
@@ -94,7 +95,7 @@ strmath_process_cmd1_1(cmdname, tail, tail_len, arg_len) = \
   strmath_process_cmd1_2(cmdname, substr(tail, 1 + mwg_strspn_n(tail, tail_len, strmath_chars_blank), arg_len), substr(tail, arg_len + 1, tail_len), tail_len - arg_len);
 strmath_process_cmd1_2(cmdname, arg, tail2, tail2_len) = ( \
   cmdname eq '\rm' || cmdname eq '\mathrm' ? arg : \
-  cmdname eq '\tt' || cmdname eq '\mathtt' ? '{/monospace' . strmath_TTFONTSIZE . ' ' . arg . '}' : \
+  cmdname eq '\tt' || cmdname eq '\mathtt' ? '{/'.strmath_font_mathtt.' '. strmath_TTFONTSIZE . ' ' . arg . '}' : \
   cmdname eq '\bm' || cmdname eq '\mathbm' ? '{/'.strmath_font_mathbm.' ' . arg . '}' : \
   strmath(arg)) . strmath_1(tail2, tail2_len);
 
@@ -134,7 +135,7 @@ strtext_process_cmd1_1(cmdname, tail, tail_len, arg_len) = \
   strtext_process_cmd1_2(cmdname, substr(tail, 1 + mwg_strspn_n(tail, tail_len, strmath_chars_blank), arg_len), substr(tail, arg_len + 1, tail_len), tail_len - arg_len);
 strtext_process_cmd1_2(cmdname, arg, tail2, tail2_len) = ( \
   cmdname eq '\rm' || cmdname eq '\textrm' ? arg : \
-  cmdname eq '\tt' || cmdname eq '\texttt' ? '{/monospace'.strmath_TTFONTSIZE.' ' . arg . '}' : \
+  cmdname eq '\tt' || cmdname eq '\texttt' ? '{/'.strmath_font_mathtt.strmath_TTFONTSIZE.' ' . arg . '}' : \
   strtext(arg)) . strtext_1(tail2, tail2_len);
 
 strtext_process_cmd(cmdname, tail, tail_len) = \
