@@ -6,6 +6,31 @@ strmath_font_mathit = 'Times:Italic'
 strmath_font_mathbm = 'Times:Italic:Bold'
 strmath_font_mathtt = 'monospace'
 
+strmath_font_setup_times = " \
+  strmath_font_mathrm = 'Times'; \
+  strmath_font_mathit = 'Times:Italic'; \
+  strmath_font_mathbm = 'Times:Italic:Bold' "
+
+strmath_font_setup_sans = " \
+  strmath_font_mathrm = 'sans-serif'; \
+  strmath_font_mathit = 'sans-serif:Italic'; \
+  strmath_font_mathbm = 'sans-serif:Bold' "
+
+strmath_font_setup_aghtex = " \
+  strmath_font_mathrm = 'aghtex_mathrm'; \
+  strmath_font_mathit = 'aghtex_mathit'; \
+  strmath_font_mathbm = 'aghtex_mathbm' "
+
+strmath_font_setup_cmu = " \
+  strmath_font_mathrm = 'CMU-Serif'; \
+  strmath_font_mathit = 'CMU-Serif:Italic'; \
+  strmath_font_mathbm = 'CMU-Serif:BoldItalic' "
+
+strmath_font_setup_cmu_sans = " \
+  strmath_font_mathrm = 'CMU-Sans-Serif'; \
+  strmath_font_mathit = 'CMU-Sans-Serif:Italic'; \
+  strmath_font_mathbm = 'CMU-Sans-Serif:Bold' "
+
 # Note: gnuplot 5.2.4 では strstrt が文字数ではなくバイト数を返す為に '〉' が空
 #   文字列に置換されてしまう。5.4 のマニュアルには strstrt("αβ", "β") の例が
 #   載っているが 5.2 には載っていない。"gnuplot-5.(奇数)" は開発版の様で、5.3
