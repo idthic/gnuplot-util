@@ -115,8 +115,8 @@ strmath_tok_read_brace_2(str, str_len, open, clos, index, depth, ch) = \
 strmath_TTFONTSIZE='=10'
 
 strmath_process_cmd_narg(cmdname, cmd_len) = \
-  cmd_len == 3 && (cmdname eq '\rm' || cmdname eq '\tt' || cmdname eq '\bm') ? 1 : \
-  cmd_len == 7 && (cmdname eq '\mathrm' || cmdname eq '\mathtt' || cmdname eq '\mathbm') ? 1 : \
+  cmd_len == 3 && (cmdname eq '\rm' || cmdname eq '\tt' || cmdname eq '\bm' || cmdname eq '\it') ? 1 : \
+  cmd_len == 7 && (cmdname eq '\mathrm' || cmdname eq '\mathtt' || cmdname eq '\mathbm' || cmdname eq '\mathit') ? 1 : \
   0;
 
 strmath_process_cmd1(cmdname, tail, tail_len) = \
@@ -127,6 +127,7 @@ strmath_process_cmd1_2(cmdname, arg, tail2, tail2_len) = ( \
   cmdname eq '\rm' || cmdname eq '\mathrm' ? arg : \
   cmdname eq '\tt' || cmdname eq '\mathtt' ? '{/'.strmath_font_mathtt.' '. strmath_TTFONTSIZE . ' ' . arg . '}' : \
   cmdname eq '\bm' || cmdname eq '\mathbm' ? '{/'.strmath_font_mathbm.' ' . arg . '}' : \
+  cmdname eq '\it' || cmdname eq '\mathit' ? '{/'.strmath_font_mathit.' ' . arg . '}' : \
   strmath(arg)) . strmath_1(tail2, tail2_len);
 
 
