@@ -1,6 +1,7 @@
 # gnuplot library -*- mode: sh -*-
 
 set encoding utf8
+strmath_font_textrm = ''
 strmath_font_mathrm = 'Times'
 strmath_font_mathit = 'Times:Italic'
 strmath_font_mathbm = 'Times:Italic:Bold'
@@ -195,10 +196,12 @@ strtext_process_del(delname, del_idx, tail, tail_len) = \
 
 strtext(str) = strtext_1(str, strlen(str));
 strtext_1(str, str_len) = str_len == 0 ? '' : \
+  (strmath_font_textrm eq '' ? '' : '{/'.strmath_font_textrm.' '). \
   strtext_2(str, str_len, \
     strmath_tok_find_cmd(str, str_len), \
     strtext_tok_find_del(str, str_len), \
-    strtext_tok_find_raw(str, str_len));
+    strtext_tok_find_raw(str, str_len)). \
+  (strmath_font_textrm eq '' ? '' : '}');
 strtext_2(str, str_len, cmd_len, del_idx, raw_len) = \
   cmd_len != 0 ? strtext_process_cmd(substr(str, 1, cmd_len), substr(str, cmd_len + 1, str_len), str_len - cmd_len) : \
   del_idx != 0 ? strtext_process_del(substr(str, 1, 1), del_idx, substr(str, 2, str_len), str_len - 1) : \
