@@ -66,8 +66,8 @@ mwg_index_4(str, str_len, needle, needle_len, split, left, left_len) = \
 strmath_symbol_minus = '−'
 strmath_symbol_langle = '⟨'
 strmath_symbol_rangle = '⟩'
-strmath_symbol_quad = '   '
-strmath_symbol_qquad = '      '
+strmath_symbol_quad = '&{m}'
+strmath_symbol_qquad = '&{mm}'
 strmath_chars_blank = " \t\n"
 
 strmath_tok__LOWER = "abcdefghijklmnopqrstuvwxyz";
@@ -114,6 +114,11 @@ strmath_tok_read_brace_2(str, str_len, open, clos, index, depth, ch) = \
 
 strmath_TTFONTSIZE='=10'
 
+strmath_process_cmd_narg(cmdname, cmd_len) = \
+  cmd_len == 3 && (cmdname eq '\rm' || cmdname eq '\tt' || cmdname eq '\bm') ? 1 : \
+  cmd_len == 7 && (cmdname eq '\mathrm' || cmdname eq '\mathtt' || cmdname eq '\mathbm') ? 1 : \
+  0;
+
 strmath_process_cmd1(cmdname, tail, tail_len) = \
   strmath_process_cmd1_1(cmdname, tail, tail_len, strmath_tok_read_arg(tail, tail_len));
 strmath_process_cmd1_1(cmdname, tail, tail_len, arg_len) = \
@@ -124,15 +129,30 @@ strmath_process_cmd1_2(cmdname, arg, tail2, tail2_len) = ( \
   cmdname eq '\bm' || cmdname eq '\mathbm' ? '{/'.strmath_font_mathbm.' ' . arg . '}' : \
   strmath(arg)) . strmath_1(tail2, tail2_len);
 
-strmath_process_cmd(cmdname, tail, tail_len) = \
-  cmdname eq '\\' ? "\n" . strmath_1(tail, tail_len) : \
-  cmdname eq '\langle' ? strmath_symbol_langle . strmath_1(tail, tail_len) : \
-  cmdname eq '\rangle' ? strmath_symbol_rangle . strmath_1(tail, tail_len) : \
-  cmdname eq '\quad' ? strmath_symbol_quad . strmath_1(tail, tail_len) : \
-  cmdname eq '\qquad' ? strmath_symbol_qquad . strmath_1(tail, tail_len) : \
-  cmdname eq '\phi' ? '{/'.strmath_font_mathit.' ϕ}' . strmath_1(tail, tail_len) : \
-  cmdname eq '\rm' || cmdname eq '\mathrm' || cmdname eq '\tt' || cmdname eq '\mathtt' || cmdname eq '\bm' || cmdname eq '\mathbm' ? strmath_process_cmd1(cmdname, tail, tail_len) : \
-  cmdname . strmath_1(tail, tail_len);
+
+# &{\U+2006} ... 1/6 em  = 0.1667em
+# &{\U+2009} ... 1/5 em  = 0.2000em
+# &{\U+205F} ... 4/18 em = 0.2222em
+# &{\U+2005} ... 1/4 em  = 0.2500em
+# &{\U+2004} ... 1/3 em  = 0.3333em
+
+strmath_process_cmd(cmdname, cmd_len, tail, tail_len) = \
+  strmath_process_cmd_narg(cmdname, cmd_len) == 1 ? strmath_process_cmd1(cmdname, tail, tail_len) : \
+  ( \
+    cmd_len == 2 ? ( \
+      cmdname eq '\\' ? "\n" : \
+      cmdname eq '\,' ? "&{\U+2006}" : \
+      cmdname eq '\:' ? "&{\U+205F}" : \
+      cmdname eq '\;' ? "&{\U+2005}" : \
+      cmdname \
+    ) : \
+    cmdname eq '\phi' ? '{/'.strmath_font_mathit.' ϕ}' : \
+    cmdname eq '\quad' ? strmath_symbol_quad : \
+    cmdname eq '\qquad' ? strmath_symbol_qquad : \
+    cmdname eq '\langle' ? strmath_symbol_langle : \
+    cmdname eq '\rangle' ? strmath_symbol_rangle : \
+    cmdname \
+  ) . strmath_1(tail, tail_len);
 
 strmath_process_italic(value, tail, tail_len) = '{/'.strmath_font_mathit.' ' . value . '}' . strmath_1(tail, tail_len);
 
@@ -148,7 +168,7 @@ strmath_1(str, str_len) = str_len <= 0 ? '}' : \
     strmath_tok_find_del(str, str_len), \
     strmath_tok_find_raw(str, str_len));
 strmath_2(str, str_len, cmd_len, it_len, del_idx, raw_len) = \
-  cmd_len != 0 ? strmath_process_cmd(substr(str, 1, cmd_len), substr(str, cmd_len + 1, str_len), str_len - cmd_len) : \
+  cmd_len != 0 ? strmath_process_cmd(substr(str, 1, cmd_len), cmd_len, substr(str, cmd_len + 1, str_len), str_len - cmd_len) : \
   it_len  != 0 ? strmath_process_italic(substr(str, 1, it_len), substr(str, it_len + 1, str_len), str_len - it_len) : \
   del_idx != 0 ? strmath_process_del(substr(str, 1, 1), del_idx, substr(str, 2, str_len), str_len - 1) : \
   raw_len != 0 ? substr(str, 1, raw_len) . strmath_1(substr(str, raw_len + 1, str_len), str_len - raw_len) : \
