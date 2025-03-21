@@ -1,4 +1,57 @@
+# Gnuplot notes and libraries
 
+## Initialiation for PDF for papers/slides
+
+```gnuplot
+set encoding utf8
+set minussign
+set terminal pdfcairo size 3.5,3.5/sqrt(2)
+set output 'a.pdf'
+```
+
+## Settings for error bands
+
+```gnuplot
+ToDo
+```
+
+## Dashtypes
+
+```gnuplot
+ToDo
+```
+
+## libstrmath.gp
+
+Functions:
+
+- `strtext(tex_source)`, `strtex(tex_source)`
+- `strmath(tex_source)`
+
+Variables:
+
+- `strmath_font_math{rm,it,bm}` ... These variables can be set to font names to
+  configure respective fonts in mathematical expressions.
+- `strmath_font_setup_{times,sans,aghtex,cmu,cmu_sans}` ... These variables can
+  be evaluated to set up the font variables with a preset configuration.
+
+Example:
+
+```gnuplot
+load 'libstrmath.gp'
+
+# font settings
+strmath_font_mathrm = 'Times'
+strmath_font_mathit = 'Times:Italic'
+strmath_font_mathbm = 'Times:Italic:Bold'
+# The above settings are equivalent to the following line:
+#eval strmath_font_setup_times
+
+set xlabel strtext('Transverse momentum $p_T$ GeV/$c$')
+set ylabel strtext('$v_2\{2\}$')
+```
+
+# Tips
 
 線の両端点が範囲外の時に線が描画されない問題は以下の設定で回避できる
 
