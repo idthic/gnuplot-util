@@ -21,6 +21,18 @@ plot ..., [t=-3:25:1] '+' using (t):(f(t))
 
 - [special-filenames](http://www.gnuplot.info/docs/loc8853.html)
 
+`with yerrorlines` を使う時は白い円盤が他のデータ点を隠してしまうので以下を設定する
+
+```gp
+set pointintervalbox 0
+```
+
+`splot` の x-y 平面が変な所に表示される問題。これは以下を設定する。
+
+```gp
+set ticslevel 0
+```
+
 ## `pm3d` で部分的にラスターで出力
 
 `pm3d` で表示する時、メッシュが細かいと生成される PDF が巨大になってしまう。PNG
@@ -58,7 +70,7 @@ plot ...
 
 その後で multiplot で重ねてプロットする。
 
-```
+```gnuplot
 set pm3d map
 set multiplot
 
@@ -103,6 +115,7 @@ file_exists(file) = system("[ -f '".file."' ] && echo '1' || echo '0'") + 0
 ```gp
 set xtics auto
 set ytics auto
+set key default
 ```
 
 `set format` に関しては既定に戻す設定はない。既定の設定と同じ設定を手で指定する
