@@ -51,6 +51,26 @@ set xlabel strtext('Transverse momentum $p_T$ GeV/$c$')
 set ylabel strtext('$v_2\{2\}$')
 ```
 
+If your system does not have good fonts, the following list shows typical
+fonts.
+
+```console
+# Typical faces similar to "Helvetica, Times, etc."
+
+$ sudo pacman -Sy gnu-free-fonts
+
+# Unicode fonts for CJK
+
+$ sudo pacman -Sy noto-fonts-cjk
+
+# CMU (Math fonts)
+
+$ sudo pacman -Sy texlive-fontsextra
+$ mkdir -p ~/.local/share/fonts
+$ ln -s /usr/share/texmf-dist/fonts/opentype/public/cm-unicode ~/.local/share/fonts/
+```
+
+
 # Tips
 
 線の両端点が範囲外の時に線が描画されない問題は以下の設定で回避できる
@@ -80,10 +100,25 @@ plot ..., [t=-3:25:1] '+' using (t):(f(t))
 set pointintervalbox 0
 ```
 
-`splot` の x-y 平面が変な所に表示される問題。これは以下を設定する。
+三次元プロット `splot` の x-y 平面が変な所に表示される問題。これは以下を設定する。
 
 ```gp
 set ticslevel 0
+```
+
+gnuplot 6.0 には対数目盛にバグがある。目盛りが $10^{n}$ ($n\ge 2$) の時、変な場
+所に目盛りが表示される。正しく表示する為には、目盛りの位置をすべて手動で指定す
+るしかない。例えば以下の様にする。3番目の数字 `1` は短い目盛り (minor tics) で
+ある事を示す。
+
+```gp
+set ytics ( \                                                                  |
+  1e-10, 1e-8, 1e-6, 1e-4, 1e-2, 1.0, \                                        |
+  "" 1e-9 1, "" 2e-9 1, "" 3e-9 1, "" 4e-9 1, "" 5e-9 1, "" 6e-9 1, "" 7e-9 1, "" 8e-9 1, "" 9e-9 1, \
+  "" 1e-7 1, "" 2e-7 1, "" 3e-7 1, "" 4e-7 1, "" 5e-7 1, "" 6e-7 1, "" 7e-7 1, "" 8e-7 1, "" 9e-7 1, \
+  "" 1e-5 1, "" 2e-5 1, "" 3e-5 1, "" 4e-5 1, "" 5e-5 1, "" 6e-5 1, "" 7e-5 1, "" 8e-5 1, "" 9e-5 1, \
+  "" 1e-3 1, "" 2e-3 1, "" 3e-3 1, "" 4e-3 1, "" 5e-3 1, "" 6e-3 1, "" 7e-3 1, "" 8e-3 1, "" 9e-3 1, \
+  "" 1e-1 1, "" 2e-1 1, "" 3e-1 1, "" 4e-1 1, "" 5e-1 1, "" 6e-1 1, "" 7e-1 1, "" 8e-1 1, "" 9e-1 1 )
 ```
 
 ## `pm3d` で部分的にラスターで出力
@@ -182,6 +217,17 @@ set format y '% h'
 
 - https://stackoverflow.com/a/40652077/4908404
 - http://www.gnuplot.info/docs_5.4/gnuplot-ja.pdf
+
+対数目盛りのラベルは例えば以下の様に設定する
+
+```gp
+# Note: 本当は "%t e%+T" だが、対数軸の時は基本的に %t = 1.0 で固定なので
+set format y '10^{%T}'
+
+# Note: もしちゃんと小数部も表示したければ例えば以下の様にする
+set format y '%.1t×10^{%T}'
+
+```
 
 ## ラベルを表に
 
