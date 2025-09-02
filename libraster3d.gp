@@ -41,7 +41,7 @@ raster3d_set_pngcairo(width, height, xmin, xmax, ymin, ymax, filename) = " \
   ".(_raster3d_set_log_x ? "set log x" : "unset log x")."; \
   ".(_raster3d_set_log_y ? "set log y" : "unset log y")."; \
   set xrange [".sprintf('%g:%g', _raster3d__range_min(xmin, xmax, width , _raster3d_set_log_x), _raster3d__range_max(xmin, xmax, width , _raster3d_set_log_x))."]; \
-  set yrange [".sprintf('%g:%g', _raster3d__range_min(ymin, ymax, height, _raster3d_set_log_x), _raster3d__range_max(ymin, ymax, height, _raster3d_set_log_x))."]; \
+  set yrange [".sprintf('%g:%g', _raster3d__range_min(ymin, ymax, height, _raster3d_set_log_y), _raster3d__range_max(ymin, ymax, height, _raster3d_set_log_y))."]; \
   print '".filename."...'; \
   set output '".filename."' "
 
