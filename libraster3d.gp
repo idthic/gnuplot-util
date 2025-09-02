@@ -45,6 +45,13 @@ raster3d_set_pngcairo(width, height, xmin, xmax, ymin, ymax, filename) = " \
   print '".filename."...'; \
   set output '".filename."' "
 
+raster3d_file_exists(file) = system("[ -f '".file."' ] && echo '1' || echo '0'") + 0
+raster3d_splot_pngcache(filename, set_pngcairo_args, splot) = " \
+  if (!raster3d_file_exists('".filename."')) { \
+    eval raster3d_set_pngcairo(".set_pngcairo_args.", '".filename."'); \
+    ".splot." \
+  } "
+
 raster3d_splot_png(width, height, xmin, xmax, ymin, ymax, filename) = " \
   unset border; \
   unset xtics; \
