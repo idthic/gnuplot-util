@@ -1,6 +1,6 @@
 # Gnuplot notes and libraries
 
-## Initialiation for PDF for papers/slides
+## Initialization for PDF for papers/slides
 
 ```gnuplot
 set encoding utf8
@@ -55,21 +55,21 @@ If your system does not have good fonts, the following list shows typical
 fonts.
 
 ```console
-# Typical faces similar to "Helvetica, Times, etc."
+Typical faces similar to "Helvetica, Times, Courier, etc."
 
 $ sudo pacman -Sy gnu-free-fonts
 
-# Unicode fonts for CJK
+Unicode fonts for CJK
 
 $ sudo pacman -Sy noto-fonts-cjk
 
-# CMU (Math fonts)
+Latin Modern and CMU (Math fonts)
 
-$ sudo pacman -Sy texlive-fontsextra
+$ sudo pacman -Sy texlive-fonts{recommended,extra}
 $ mkdir -p ~/.local/share/fonts
-$ ln -s /usr/share/texmf-dist/fonts/opentype/public/cm-unicode ~/.local/share/fonts/
+$ ln -s /usr/share/texmf-dist/fonts/opentype/public/{lm,cm-unicode} ~/.local/share/fonts/
+$ fc-cache -fv
 ```
-
 
 # Tips
 
