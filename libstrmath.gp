@@ -148,6 +148,11 @@ strmath_process_cmd(cmdname, cmd_len, tail, tail_len) = \
       cmdname eq '\;' ? "&{\U+2005}" : \
       cmdname \
     ) : \
+    cmd_len == 3 ? ( \
+      cmdname eq '\le' ? "\U+2264" : \
+      cmdname eq '\ge' ? "\U+2265" : \
+      cmdname \
+    ) : \
     cmdname eq '\phi' ? '{/'.strmath_font_mathit.' ϕ}' : \
     cmdname eq '\quad' ? strmath_symbol_quad : \
     cmdname eq '\qquad' ? strmath_symbol_qquad : \
